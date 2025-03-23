@@ -1,28 +1,53 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div>
+      <h1>Vuex</h1>
+      <p>Count : {{ count }}</p>
+      <p>Double : {{ doubleCount }}</p>
+      <button @click="increment">+</button>
+    </div>
+    <h1>ToDoList</h1>
+    <input type="text" v-model="newTask" @keyup.enter="addTask" placeholder="새로운 할 일">
+    <button @click="addTask">Add</button>
+    <ul>
+      <li v-for="(task, index) in tasks" :key="index">
+        {{ task }}
+        <button @click="removeTask(index)">삭제</button>
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import { mapState, mapMutations, mapGetters } from 'vuex';
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
+  data(){
+    return {
+      newTask : '',
+      tasks : []
+    }
+  },
+  computed : {
+    ...mapState(['count']),
+    ...mapGetters(['doubleCount'])
+  },
+  methods : {
+    addTask(){
+      if(this.newTask.trim()){
+        this.tasks.push(this.newTask);
+        this.newTask = "";
+      }
+    },
+    removeTask(index){
+      this.tasks.splice(index, 1);
+    },
+    ...mapMutations(['increment'])
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+
 </style>
